@@ -1,9 +1,10 @@
 import * as ActionTypes from './ActionTypes';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { bindActionCreators } from 'redux';
 
 import MasterPanel from '../screens/MasterPanel';
+
+var currentPage = 1;
 
 export const onSuccess = (data) => ({
     type: ActionTypes.SERVICE_SUCCESS,
@@ -27,15 +28,16 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        doContactGet: () => dispatch(callContactService())
+        doContactGet: () => dispatch(callContactService(currentPage))
     }
 }
 
-export const callContactService = () => {
+export const callContactService = (page) => {
     return dispatch => {
             dispatch(onPending());
-            axios.get("https://randomuser.me/api/?exc=login&seed=teddy&page=1&results=30")
+            axios.get(`https://randomuser.me/api/?exc=login&seed=teddy&page=${page}&results=30`)
                 .then(response => {
+                    currentPage += 1
                     dispatch(onSuccess(response.data))
                 })
                 .catch(error => {

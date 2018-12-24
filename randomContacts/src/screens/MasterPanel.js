@@ -1,32 +1,52 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, ActivityIndicator, Alert } from 'react-native';
+import { View, FlatList, ActivityIndicator, Alert } from 'react-native';
 import { List, ListItem, SearchBar } from 'react-native-elements'; 
 
 export default class MasterPanel extends Component {
+
+    static navigationOptions = ({ navigation }) => ({
+        title: "User List",
+        headerTitleStyle:{
+            textAlign: 'center',
+            fontFamily: "Xiaowei-Regular",
+            flex: 1
+        },
+     });
 
     constructor(props) {
         super(props);
 
         this.state = {
-            loading: false,
+            isLoading: true,
             data: [],
             error: null
         };
         
-        console.log("CONSTRUCTOR");
         this.arrayHolder = [];
+        this.isSearching = false;
+        this.askingMorePages = false;
     }
 
     componentDidMount() {
         this.props.doContactGet();
     }
 
+    handleBackButton(){
+        this.props.navigation.goBack();
+        return true;
+    }
+
     componentWillReceiveProps(nextProps) {
-        if (nextProps.data != null) {
-            console.log('success: the state', nextProps)
-            this.arrayHolder.push.apply(this.arrayHolder, nextProps.data)
+        console.log("PROPS: ", nextProps);
+        if (nextProps.data.length > 0) {
+            this.arrayHolder = nextProps.data
             this.setState({
+                isLoading: false,
                 data: nextProps.data
+            });
+        } else {
+            this.setState({
+                isLoading: nextProps.isLoading,
             });
         }
 
@@ -37,15 +57,21 @@ export default class MasterPanel extends Component {
                 [
                     { text: 'Do you want to reload', onPress: () => this.props.doContactGet() },
                 ],
-                { cancelable: false })
+                { cancelable: false }
+            );
+        }
+    
+        if (!nextProps.isLoading) {
+            this.askingMorePages = false;
         }
     }
 
     searchFilterFunction = text => {
+        this.isSearching = text.length > 0;
         const newData = this.arrayHolder.filter(item => {
-          const itemData = `${item.name.last.toLowerCase()} ${item.name.first.toLowerCase()} `;
+          const itemData = `${item.name.last.toLowerCase()}`;
           const textData = text.toLowerCase();
-          return itemData.indexOf(textData) > -1;
+          return itemData.startsWith(textData);
         });
         this.setState({
           data: newData,
@@ -53,11 +79,13 @@ export default class MasterPanel extends Component {
       };
 
       render() {
-        if (this.state.loading) {
+          console.log("IS LOADING: ",this.state.isLoading);
+        if (this.state.isLoading) {
+            console.log("RENDER LOADING");
           return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
               <ActivityIndicator 
-                style={[styles.centering, { height: 80 }]}
+                style={[{ height: 80 }]}
                 size="large"
                 color="#0000ff"/>
             </View>
@@ -68,16 +96,21 @@ export default class MasterPanel extends Component {
                 <FlatList
                     data={this.state.data}
                     renderItem={({ item }) => (
-                        <ListItem button onPress={() => { this.props.navigation.navigate('DetailView', { name: item.name.first + " " + item.name.last, gender: item.gender }) }}
+                        <ListItem button onPress={() => { this.props.navigation.navigate('DetailView', { name: `${item.name.first}, ${item.name.last}`, gender: item.gender, avatar: item.picture.large, email: item.email }) }}
                         roundAvatar
-                        title={`${item.name.last} ${item.name.first}`}
+                        title={`${item.name.last}, ${item.name.first}`}
+                        titleStyle={{ fontFamily: "Xiaowei-Regular" }}
                         subtitle={item.email}
+                        subtitleStyle={{ fontFamily: "Xiaowei-Regular" }}
                         avatar={{ uri: item.picture.thumbnail }}
-                        containerStyle={{ borderBottomWidth: 0 }}/>
+                        containerStyle={{ borderBottomWidth: 0 }}
+                        />
                     )}
                     keyExtractor={item => item.email}
                     ItemSeparatorComponent={this.renderSeparator}
                     ListHeaderComponent={this.renderHeader}
+                    onEndReached={this.onLoadMore}
+                    onEndThreshold={0}
                 />
             </List>
         );
@@ -86,13 +119,21 @@ export default class MasterPanel extends Component {
       renderHeader = () => {
         return (
           <SearchBar
-            placeholder="Type Here..."
+            placeholder="Search by lastname"
             lightTheme
             round
             onChangeText={text => this.searchFilterFunction(text)}
+            inputStyle={{ fontFamily: "Xiaowei-Regular" }}
             autoCorrect={false}
           />
         );
+      };
+
+      onLoadMore = () => {
+        if (!this.isSearching && !this.askingMorePages) {
+            this.askingMorePages = true;
+            this.props.doContactGet();
+        }
       };
 
 }

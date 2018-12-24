@@ -4,13 +4,11 @@ import ContactServiceStore from './redux/ContactServiceStore';
 import DetailPanel from './screens/DetailPanel';
 
 const MasterDetailNav = createStackNavigator({
-    MasterView: { screen: ContactServiceStore },
+    MasterView: {
+        screen: ContactServiceStore     
+    },
     DetailView: { 
-        screen: DetailPanel,
-        navigationOptions: () => ({
-            title: `B`,
-            headerBackTitle: 'List'
-          }),
+        screen: DetailPanel
      },
     initialRouteName: 'MasterView',
 });

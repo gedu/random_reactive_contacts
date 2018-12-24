@@ -11,9 +11,8 @@ import { Provider } from 'react-redux';
 
 import store from './src/redux/Index';
 import MasterDetailNav from './src/Navigator';
-import MasterPanel from './src/screens/MasterPanel';
 
-export default class App extends Component {
+export default class App extends Component<{}> {
   render() {
     return (
       <Provider store={store}>
