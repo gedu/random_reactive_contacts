@@ -1,3 +1,3 @@
 # random_reactive_contacts
 
-![Alt text](/screens/contact_list.jpg?raw=true "Contact List")
+<img src="https://raw.githubusercontent.com/gedu/random_reactive_contacts/master/screens/contact_list.jpg" width="200" height="400"/>
