@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   name: {
-    fontFamily: "Xiaowei-Regular",
+    fontFamily: "Xiaowei",
     color: '#D20A4B',
     fontSize: 24,
     padding:10,
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     marginTop:10
   },
   text:{
-    fontFamily: "Xiaowei-Regular",
+    fontFamily: "Xiaowei",
     fontSize:16,
     textAlign:'center',
     padding:5
@@ -27,12 +27,12 @@ const styles = StyleSheet.create({
 
 export default class DetailPanel extends Component {
 
-  static navigationOptions = ({ navigation }) => ({
+  static defaultNavigationOptions = ({ navigation }) => ({
     title: "User Details",
     headerBackTitle: 'User List',
     headerTitleStyle:{
         textAlign: 'center',
-        fontFamily: "Xiaowei-Regular",
+        fontFamily: "Xiaowei",
         flex: 1
     },
  });

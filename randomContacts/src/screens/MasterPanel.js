@@ -8,7 +8,7 @@ export default class MasterPanel extends Component {
         title: "User List",
         headerTitleStyle:{
             textAlign: 'center',
-            fontFamily: "Xiaowei-Regular",
+            fontFamily: "Xiaowei",
             flex: 1
         },
      });
@@ -37,7 +37,7 @@ export default class MasterPanel extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("PROPS: ", nextProps);
+        
         if (nextProps.data.length > 0) {
             this.arrayHolder = nextProps.data
             this.setState({
@@ -79,9 +79,7 @@ export default class MasterPanel extends Component {
       };
 
       render() {
-          console.log("IS LOADING: ",this.state.isLoading);
         if (this.state.isLoading) {
-            console.log("RENDER LOADING");
           return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
               <ActivityIndicator 
@@ -99,9 +97,9 @@ export default class MasterPanel extends Component {
                         <ListItem button onPress={() => { this.props.navigation.navigate('DetailView', { name: `${item.name.first}, ${item.name.last}`, gender: item.gender, avatar: item.picture.large, email: item.email }) }}
                         roundAvatar
                         title={`${item.name.last}, ${item.name.first}`}
-                        titleStyle={{ fontFamily: "Xiaowei-Regular" }}
+                        titleStyle={{ fontFamily: "Xiaowei" }}
                         subtitle={item.email}
-                        subtitleStyle={{ fontFamily: "Xiaowei-Regular" }}
+                        subtitleStyle={{ fontFamily: "Xiaowei" }}
                         avatar={{ uri: item.picture.thumbnail }}
                         containerStyle={{ borderBottomWidth: 0 }}
                         />
@@ -123,7 +121,7 @@ export default class MasterPanel extends Component {
             lightTheme
             round
             onChangeText={text => this.searchFilterFunction(text)}
-            inputStyle={{ fontFamily: "Xiaowei-Regular" }}
+            inputStyle={{ fontFamily: "Xiaowei" }}
             autoCorrect={false}
           />
         );
