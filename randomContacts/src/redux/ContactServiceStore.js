@@ -35,7 +35,7 @@ const mapDispatchToProps = (dispatch) => {
 export const callContactService = (page) => {
     return dispatch => {
             dispatch(onPending());
-            axios.get(`https://randomuser.me/api/?exc=login&seed=teddy&page=${page}&results=30`)
+            return axios.get(`https://randomuser.me/api/?exc=login&seed=teddy&page=${page}&results=30`)
                 .then(response => {
                     currentPage += 1
                     dispatch(onSuccess(response.data))
